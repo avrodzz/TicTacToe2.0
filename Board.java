@@ -2,8 +2,8 @@ public class Board {
     private char[][] board;
     private int numOfPlayers;
     private int boardSize;
-    private static final char SPACE = ' ';
-    private static final int MIN_NUM_OF_PLAYERS = 3, MAX_NUM_OF_PLAYERS = 10;
+    public static final char SPACE = ' ';
+    public static final int MIN_NUM_OF_PLAYERS = 3, MAX_NUM_OF_PLAYERS = 10;
 
     /**
      * Default Constructor
