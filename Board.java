@@ -206,6 +206,8 @@ public class Board {
 
             // First Attempt at printing the board (what was I thinking lol, it works
             // though)
+
+            // Prints the column text Example: | |0|1|2|...|etc|
             System.out.println();
             System.out.print("| ");
             for (int i = 0; i < this.boardSize; i++) {
@@ -220,6 +222,7 @@ public class Board {
             }
             System.out.println();
 
+            // Prints lines after the column text is printed Example: --------------
             for (int i = 0; i < this.boardSize + 1; i++) {
                 System.out.print("-");
                 System.out.print("-");
@@ -227,6 +230,7 @@ public class Board {
             }
             System.out.println();
 
+            // Prints the rows and empty columns for each Example: |0| | | | |
             for (int i = 0; i < this.boardSize; i++) {
                 if (i > 9) {
                     System.out.print(i + "|");
@@ -243,6 +247,8 @@ public class Board {
                 }
                 System.out.println();
             }
+
+            // Adds a new line
             System.out.println();
         } else {
             System.out.println("Invalid board. Cannot print board to console. Number of players is not sufficient.");

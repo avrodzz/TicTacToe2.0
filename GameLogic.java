@@ -9,6 +9,7 @@ public class GameLogic {
     private Scorer scorer = new Scorer();
     private int currentRow = 0, currentColumn = 0;
     private static final int MIN_NUM_OF_WINS = 3;
+    private static final String gameTitle = "Tic Tac Toe 2.0";
 
     /**
      * Default Constructor
@@ -221,6 +222,7 @@ public class GameLogic {
                 if (col < 0 || col > this.board.getNumOfPlayers()) {
                     System.out.println("Invalid Column.");
                 }
+                this.board.printBoard();
 
             } catch (InputMismatchException exception) {
                 System.out.println("Invalid input. Possible row indices (0 - " + this.board.getNumOfPlayers()
@@ -228,6 +230,7 @@ public class GameLogic {
                 // Provides an invalid row and column, so the loop continues
                 row = -1;
                 col = -1;
+                this.board.printBoard();
             }
             in.nextLine();
 
@@ -291,20 +294,31 @@ public class GameLogic {
          */
         System.out.println("GameLogic play");
 
+        // Keeps track of which player goes next
         int playerCount = 0;
 
+        // Game loop
         do {
+            // Reinitialize playerCount to 0, so that the players keep going one after the
+            // other
             if (playerCount == this.board.getNumOfPlayers()) {
                 playerCount = 0;
             }
+
+            // Created a temp variable for the currentPlayer, so that I would not have to
+            // write players.get(playerCount) a bunch of times
             Player currentPlayer = players.get(playerCount);
 
+            // Print to console the player that is currently playing
             System.out.println("Player " + currentPlayer.getPlayer());
 
+            // Allow and validate the player to row and column moves
             this.takePlayerMoves(currentPlayer);
+
+            // Print the board after every move
             this.board.printBoard();
 
-            // System.out.println(this.currentRow + " " + this.currentColumn);
+            // Check for tie or any horizontal, vertical, or diagonal wins made by a player
             this.scorer.scoreBoard(this.board, currentPlayer, this.currentRow, this.currentColumn);
 
             playerCount++;
