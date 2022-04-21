@@ -9,7 +9,7 @@ public class GameLogic {
     private Scorer scorer = new Scorer();
     private int currentRow = 0, currentColumn = 0;
     private static final int MIN_NUM_OF_WINS = 3;
-    private static final String gameTitle = "Tic Tac Toe 2.0";
+    private static final String GAME_TITLE = "Tic Tac Toe 2.0";
 
     /**
      * Default Constructor
@@ -54,6 +54,9 @@ public class GameLogic {
             }
             in.nextLine(); // clear the line
         } while (!this.isValidNumOfPlayers());
+
+        System.out.println("There are " + this.board.getNumOfPlayers() + " players playing in this iteration of "
+                + this.GAME_TITLE + ".");
     }
 
     /**
@@ -177,6 +180,8 @@ public class GameLogic {
             }
             in.nextLine(); // clears the line
         } while (!this.isNumToWinValid());
+
+        System.out.println("The number of slots needed to win is " + this.scorer.getNumToWin() + ".");
     }
 
     /**
@@ -256,6 +261,13 @@ public class GameLogic {
     }
 
     /**
+     * Prints the game title
+     */
+    public void printGameHeader() {
+        System.out.println(this.GAME_TITLE);
+    }
+
+    /**
      * Mutator
      * Sets up the game. Number of players, player pieces, and number of slots to
      * win is decided here.
@@ -268,7 +280,7 @@ public class GameLogic {
          * 3. Ask the user for the number of slots that are needed to win
          * 4. Print the initial board
          */
-        System.out.println("GameLogic setUp");
+        this.printGameHeader();
 
         this.validateNumOfPlayersPlaying();
         // System.out.println(this.board.getNumOfPlayers()); // test
@@ -292,7 +304,7 @@ public class GameLogic {
          * 2. Check for wins
          * 3. Print a win message
          */
-        System.out.println("GameLogic play");
+        System.out.println("Let's Play!");
 
         // Keeps track of which player goes next
         int playerCount = 0;
