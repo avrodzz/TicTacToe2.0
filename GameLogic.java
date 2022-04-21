@@ -189,43 +189,61 @@ public class GameLogic {
     }
 
     /**
+     * Mutator
+     * Takes row and col from user input and validates it and sets the player's
+     * character on the board.
      * 
-     * @param player
+     * @param player the player
      */
     public void takePlayerMoves(Player player) {
         /*
-         * 1.
+         * 1. Get row and col from user input
+         * 2. Make sure the input is validated
+         * 3. Add the player's character piece to the board
          */
 
         int row, col;
 
         do {
             try {
+                // Getting the row from the user
                 System.out.println("Enter in the row (0 - " + this.board.getNumOfPlayers() + "): ");
                 row = in.nextInt();
-                if(row < 0 || row > this.board.getNumOfPlayers()){
+                if (row < 0 || row > this.board.getNumOfPlayers()) {
                     System.out.println("Invalid Row.");
                 }
 
+                // Getting the colum from the user
                 System.out.println("Enter in the col (0 - " + this.board.getNumOfPlayers() + "): ");
                 col = in.nextInt();
-                if(col < 0 || col > this.board.getNumOfPlayers()){
+                if (col < 0 || col > this.board.getNumOfPlayers()) {
                     System.out.println("Invalid Column.");
                 }
 
             } catch (InputMismatchException exception) {
                 System.out.println("Invalid input. Possible row indices (0 - " + this.board.getNumOfPlayers()
                         + "). Possible col indices (0 - " + this.board.getNumOfPlayers() + ").");
+                // Provides an invalid row and column, so the loop continues
                 row = -1;
                 col = -1;
             }
             in.nextLine();
-            
+
         } while (!this.isRowColComboValid(row, col));
 
+        // Sets the player's character on the board
         this.board.setPlayerOnBoardSpace(row, col, player.getPlayer());
     }
 
+    /**
+     * Accessor
+     * Get whether the row and col provided in available, so the player can place
+     * their character piece there
+     * 
+     * @param row the row in the game
+     * @param col the column in the game
+     * @return True, if the board space is empty or available, otherwise false
+     */
     public boolean isRowColComboValid(int row, int col) {
         return (this.board.isValidSpace(row, col) && this.board.charOnBoardSpace(row, col) == this.board.SPACE);
     }
@@ -267,13 +285,15 @@ public class GameLogic {
         System.out.println("GameLogic play");
         this.board.printBoard();
         int playerCount = 0;
+
+        // Play the game without scoring at the moment
         for (int i = 0; i < (this.board.getBoardSize() + 1) * this.players.size() + 1; i++) { // Loop misses one player
-            if(playerCount == this.board.getNumOfPlayers()){
+            if (playerCount == this.board.getNumOfPlayers()) {
                 playerCount = 0;
             }
 
             System.out.println("Player " + players.get(playerCount).getPlayer());
-        
+
             this.takePlayerMoves(players.get(playerCount));
             this.board.printBoard();
             playerCount++;
