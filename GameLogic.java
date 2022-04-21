@@ -6,7 +6,8 @@ public class GameLogic {
     private Board board = new Board();
     private ArrayList<Player> players = new ArrayList<Player>();
     private Scanner in = new Scanner(System.in);
-    private int numToWin = 0;
+    private Scorer scorer = new Scorer();
+    private int currentRow = 0, currentColumn = 0;
     private static final int MIN_NUM_OF_WINS = 3;
 
     /**
@@ -168,7 +169,7 @@ public class GameLogic {
         do {
             try {
                 System.out.println("Enter in a number of slots to win: ");
-                this.numToWin = in.nextInt();
+                this.scorer.setNumToWin(in.nextInt());
             } catch (InputMismatchException exception) { // Throws exception if input is anything other than an integer
                 System.out.println("Invalid input. Number of slots to win must be (Min: " + this.MIN_NUM_OF_WINS
                         + " Max: " + this.board.getBoardSize() + ")");
@@ -185,7 +186,8 @@ public class GameLogic {
      * @return true if the number is valid, otherwise false
      */
     private boolean isNumToWinValid() {
-        return (this.numToWin >= this.MIN_NUM_OF_WINS && this.numToWin <= this.board.getBoardSize());
+        return (this.scorer.getNumToWin() >= this.MIN_NUM_OF_WINS
+                && this.scorer.getNumToWin() <= this.board.getBoardSize());
     }
 
     /**
@@ -233,6 +235,8 @@ public class GameLogic {
 
         // Sets the player's character on the board
         this.board.setPlayerOnBoardSpace(row, col, player.getPlayer());
+        this.currentRow = row;
+        this.currentColumn = col;
     }
 
     /**
@@ -259,17 +263,20 @@ public class GameLogic {
          * 2. Ask the user for the player piece characters that will correspond to the
          * players playing
          * 3. Ask the user for the number of slots that are needed to win
+         * 4. Print the initial board
          */
         System.out.println("GameLogic setUp");
 
         this.validateNumOfPlayersPlaying();
-        // System.out.println(this.board.getNumOfPlayers());
+        // System.out.println(this.board.getNumOfPlayers()); // test
 
         this.validatePlayerPieces();
-        // System.out.println(this.getPlayersList());
+        // System.out.println(this.getPlayersList()); // test
 
         this.validateNumToWin();
-        // System.out.println(this.isNumToWinValid());
+        // System.out.println(this.isNumToWinValid()); // test
+
+        this.board.printBoard();
     }
 
     /**
@@ -283,21 +290,26 @@ public class GameLogic {
          * 3. Print a win message
          */
         System.out.println("GameLogic play");
-        this.board.printBoard();
+
         int playerCount = 0;
 
-        // Play the game without scoring at the moment
-        for (int i = 0; i < (this.board.getBoardSize() + 1) * this.players.size() + 1; i++) { // Loop misses one player
+        do {
             if (playerCount == this.board.getNumOfPlayers()) {
                 playerCount = 0;
             }
+            Player currentPlayer = players.get(playerCount);
 
-            System.out.println("Player " + players.get(playerCount).getPlayer());
+            System.out.println("Player " + currentPlayer.getPlayer());
 
-            this.takePlayerMoves(players.get(playerCount));
+            this.takePlayerMoves(currentPlayer);
             this.board.printBoard();
+
+            // System.out.println(this.currentRow + " " + this.currentColumn);
+            this.scorer.scoreBoard(this.board, currentPlayer, this.currentRow, this.currentColumn);
+
             playerCount++;
-        }
+
+        } while (!this.scorer.getIsWin());
 
         System.out.println("Game Over!");
     }
