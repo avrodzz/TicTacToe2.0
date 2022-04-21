@@ -78,11 +78,34 @@ public class Scorer {
      * @param col    the col
      * @return true, horizontal win, otherwise false no horizontal win
      */
-    public boolean checkHorizontal(Board board, Player player, int row, int col) {
+    public boolean checkHorizontal(Board board) {
         /*
-         * 1.
+         * 1. Check the horizontal that the players move is in for a win
          */
-        return true;
+
+        int winningCount = 0;
+
+        // Iterate through each cell in the board
+        for (int i = 0; i < board.getBoardSize(); i++) {
+            char temp = ' ';
+            for (int j = 0; j < board.getBoardSize(); j++) {
+                char current = board.charOnBoardSpace(i, j);
+
+                if (current == temp) {
+                    if (current != board.SPACE) {
+                        winningCount++;
+                    }
+                } else {
+                    winningCount = 1;
+                    temp = current;
+                }
+                if (winningCount == this.numToWin) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -95,11 +118,33 @@ public class Scorer {
      * @param col    the col
      * @return true, vertical win, otherwise false no vertical win
      */
-    public boolean checkVertical(Board board, Player player, int row, int col) {
+    public boolean checkVertical(Board board) {
         /*
-         * 1.
+         * 1. Check the vertical that the players move is in for a win
          */
-        return true;
+
+        int winningCount = 0;
+
+        for (int i = 0; i < board.getBoardSize(); i++) {
+            char temp = ' ';
+            for (int j = 0; j < board.getBoardSize(); j++) {
+                char current = board.charOnBoardSpace(j, i);
+
+                if (current == temp) {
+                    if (current != board.SPACE) {
+                        winningCount++;
+                    }
+                } else {
+                    winningCount = 1;
+                    temp = current;
+                }
+                if (winningCount == this.numToWin) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -112,11 +157,72 @@ public class Scorer {
      * @param col    the col
      * @return true, diagonal win, otherwise false no diagonal win
      */
-    public boolean checkDiagonal(Board board, Player player, int row, int col) {
+    public boolean checkDiagonal(Board board) {
         /*
-         * 1.
+         * 1. Check the diagonal that the players move is in for a win
          */
-        return true;
+
+        for (int i = 0; i < board.getBoardSize(); i++) {
+            for (int j = 0; j < board.getBoardSize(); j++) {
+                // Top Left
+                if (this.checkDiagonal(board, i, j, -1, -1)) {
+                    return true;
+                }
+                // Bottom Left
+                if (this.checkDiagonal(board, i, j, -1, 1)) {
+                    return true;
+                }
+                // Top Right
+                if (this.checkDiagonal(board, i, j, 1, -1)) {
+                    return true;
+                }
+                // Bottom Right
+                if (this.checkDiagonal(board, i, j, 1, 1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Accessor
+     * Checks the damn diagonals.
+     * 
+     * @param board the board
+     * @param x     the i index
+     * @param y     the j index
+     * @param xMove the x direction of diagonal
+     * @param yMove the y direction of diagonal
+     * @return true if diagonal exists
+     */
+    public boolean checkDiagonal(Board board, int x, int y, int xMove, int yMove) {
+        /*
+         * 1. Make sure not to go out of bounds with x and y
+         * 2. Check the values at the index against player character
+         * 3. Return true or false if there is a diagonal
+         */
+
+        int winningCount = 0;
+        char temp = ' ';
+        while (x >= 0 && x < board.getBoardSize() && y >= 0 && y < board.getBoardSize()) {
+            char current = board.charOnBoardSpace(x, y);
+
+            if (current == temp) {
+                if (current != board.SPACE) {
+                    winningCount++;
+                }
+            } else {
+                winningCount = 1;
+                temp = current;
+            }
+            if (winningCount == this.numToWin) {
+                return true;
+            }
+            x += xMove;
+            y += yMove;
+        }
+        return false;
     }
 
     /**
@@ -136,8 +242,8 @@ public class Scorer {
          */
 
         // Checks horizontal, vertical, diagonal win
-        if (this.checkHorizontal(board, player, row, col) || this.checkVertical(board, player, row, col)
-                || this.checkDiagonal(board, player, row, col)) {
+        if (this.checkHorizontal(board) || this.checkVertical(board)
+                || this.checkDiagonal(board)) {
             System.out.println("Player " + player.getPlayer() + " wins!");
             this.isWin = true;
         }
