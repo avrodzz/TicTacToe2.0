@@ -189,6 +189,48 @@ public class GameLogic {
     }
 
     /**
+     * 
+     * @param player
+     */
+    public void takePlayerMoves(Player player) {
+        /*
+         * 1.
+         */
+
+        int row, col;
+
+        do {
+            try {
+                System.out.println("Enter in the row (0 - " + this.board.getNumOfPlayers() + "): ");
+                row = in.nextInt();
+                if(row < 0 || row > this.board.getNumOfPlayers()){
+                    System.out.println("Invalid Row.");
+                }
+
+                System.out.println("Enter in the col (0 - " + this.board.getNumOfPlayers() + "): ");
+                col = in.nextInt();
+                if(col < 0 || col > this.board.getNumOfPlayers()){
+                    System.out.println("Invalid Column.");
+                }
+
+            } catch (InputMismatchException exception) {
+                System.out.println("Invalid input. Possible row indices (0 - " + this.board.getNumOfPlayers()
+                        + "). Possible col indices (0 - " + this.board.getNumOfPlayers() + ").");
+                row = -1;
+                col = -1;
+            }
+            in.nextLine();
+            
+        } while (!this.isRowColComboValid(row, col));
+
+        this.board.setPlayerOnBoardSpace(row, col, player.getPlayer());
+    }
+
+    public boolean isRowColComboValid(int row, int col) {
+        return (this.board.isValidSpace(row, col) && this.board.charOnBoardSpace(row, col) == this.board.SPACE);
+    }
+
+    /**
      * Mutator
      * Sets up the game. Number of players, player pieces, and number of slots to
      * win is decided here.
@@ -209,7 +251,7 @@ public class GameLogic {
         // System.out.println(this.getPlayersList());
 
         this.validateNumToWin();
-        System.out.println(this.isNumToWinValid());
+        // System.out.println(this.isNumToWinValid());
     }
 
     /**
@@ -224,5 +266,19 @@ public class GameLogic {
          */
         System.out.println("GameLogic play");
         this.board.printBoard();
+        int playerCount = 0;
+        for (int i = 0; i < (this.board.getBoardSize() + 1) * this.players.size() + 1; i++) { // Loop misses one player
+            if(playerCount == this.board.getNumOfPlayers()){
+                playerCount = 0;
+            }
+
+            System.out.println("Player " + players.get(playerCount).getPlayer());
+        
+            this.takePlayerMoves(players.get(playerCount));
+            this.board.printBoard();
+            playerCount++;
+        }
+
+        System.out.println("Game Over!");
     }
 }

@@ -149,7 +149,7 @@ public class Board {
                 this.board[row][col] = player;
             }
         } else {
-            System.out.println("Invalid row or column. Row: " + row + " Col: " + col + " do not exist!");
+            System.out.println("Invalid row or column. Row: " + row + " Col: " + col + " does not exist!");
         }
     }
 
