@@ -206,6 +206,7 @@ public class Board {
 
             // First Attempt at printing the board (what was I thinking lol, it works
             // though)
+            System.out.println();
             System.out.print("| ");
             for (int i = 0; i < this.boardSize; i++) {
                 if (i > 9) {

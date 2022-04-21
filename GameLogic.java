@@ -223,5 +223,6 @@ public class GameLogic {
          * 3. Print a win message
          */
         System.out.println("GameLogic play");
+        this.board.printBoard();
     }
 }
